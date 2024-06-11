@@ -61,13 +61,25 @@
     };
 
     const attachEventListeners = () => {
-        canvas.addEventListener('mousemove', e => {
-            positions.mouseX = e.pageX;
-            positions.mouseY = e.pageY;
-        });
+        const updatePosition = (x, y) => {
+            positions.mouseX = x;
+            positions.mouseY = y;
+        };
 
+        canvas.addEventListener('mousemove', e => updatePosition(e.pageX, e.pageY));
         canvas.addEventListener('mousedown', () => mouseClicked = true);
         canvas.addEventListener('mouseup', () => mouseClicked = false);
+
+        canvas.addEventListener('touchmove', e => {
+            const touch = e.touches[0];
+            updatePosition(touch.pageX, touch.pageY);
+        });
+        canvas.addEventListener('touchstart', e => {
+            mouseClicked = true;
+            const touch = e.touches[0];
+            updatePosition(touch.pageX, touch.pageY);
+        });
+        canvas.addEventListener('touchend', () => mouseClicked = false);
     };
 
     const loop = () => {
